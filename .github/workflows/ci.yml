@@ -1,6 +1,6 @@
 name: CI
 on:
-  push: # Se ejecute este workflow cuando hagan push en cualquier rama de nuestro repo
+  push:
     branches:
       - "main" # Solo se ejecute en acciones de la rama main
   pull_request: # Se ejecute el workflow al hacer pull requests
