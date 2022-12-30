@@ -1,0 +1,18 @@
+name: CI
+on:
+  push: # Se ejecute este workflow cuando hagan push en cualquier rama de nuestro repo
+    branches:
+      - "main" # Solo se ejecute en acciones de la rama main
+  pull_request: # Se ejecute el workflow al hacer pull requests
+    branches: [ main ] # Acciones en rama main
+
+jobs:
+  audit: # Le pedimos que audite el projh
+    runs-on: ubuntu-latest # Le decimos en que tipo de host queremos que se ejecute (self-hosted runners o en github)
+    steps: # Creamos los pasos del job
+      - name: inspect # Nombre del step
+        run: | # Símbolo que permite escribir multilínea
+          ls -al
+          whoami
+          pwd
+          node -v
