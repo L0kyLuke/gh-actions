@@ -1,10 +1,6 @@
 name: CI
-on:
-  push:
-    branches:
-      - "main"
-    paths:
-      - "hangman-api/**"
+on: # Hemos eliminado el on push
+  workflow_dispatch: # Elegimos manualmente cuando se ejecuta
   pull_request:
     branches: [ main ]
     paths: ['hangman-api/**']
@@ -19,13 +15,13 @@ jobs:
         run: |
           npm ci
           npm run build --if-present
-  test: # Esto es otro  job distinto por lo tanto otra máquina que se ejecuta en limpio
+  test:
     runs-on: ubuntu-latest
-    needs: build # Hace que este job se ejecute tras el job "build"
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: test
         working-directory: ./hangman-api
         run: |
           npm ci
-          npm test  
+          npm test   
