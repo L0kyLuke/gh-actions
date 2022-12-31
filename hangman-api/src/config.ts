@@ -1,6 +1,6 @@
 if(process.env.NODE_ENV === 'development') {
   require('dotenv').config();
-}
+}//skjfashaskjsh
 export default {
   database: {
     isActive: process.env.DATA_BASE_ACTIVE,
