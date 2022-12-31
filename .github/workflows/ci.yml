@@ -10,6 +10,7 @@ jobs:
   audit: # Le pedimos que audite el projh
     runs-on: ubuntu-latest # Le decimos en que tipo de host queremos que se ejecute (self-hosted runners o en github)
     steps: # Creamos los pasos del job
+      - uses: actions/checkout@v3
       - name: inspect # Nombre del step
         run: | # Símbolo que permite escribir multilínea
           ls -al
