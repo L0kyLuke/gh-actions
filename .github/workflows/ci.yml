@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node envirnoment
         uses: actions/setup-node@v3 # Usamos la action Setup Node.js environment. Nos permite fijar una version de node
         with:
-          node-version: ${{ mmatrix.node-version }} # Recorre la matrix con las 3 versiones definidas en node-version
+          node-version: ${{ matrix.node-version }} # Recorre la matrix con las 3 versiones definidas en node-version
       - name: build and build-test
         working-directory: ./hangman-api
         run: |
