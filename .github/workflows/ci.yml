@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      matrix: # Creamos una matriz de estrategias
+      matrix: # Creamos una matriz de estrategia
         node-version: [14.x, 15.x, 16.x]
         
 
