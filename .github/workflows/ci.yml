@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: 16
           cache: yarn
+      - name: Get yarn cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: test
         working-directory: ./hangman-api
         # Aqui eliminamos npm ci ya que no es necesario instalar las depenencias
