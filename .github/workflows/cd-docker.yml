@@ -22,7 +22,7 @@ jobs:
           npm run build --if-present
 
   # Empaquetado de la imagen de Docker
-      - uses: actions/upload-artifac@v3 # Para poder subir los ficheros
+      - uses: actions/upload-artifact@v3 # Para poder subir los ficheros
         with:
           name: build-code # Usa la API de DockerHub. Si reutilizamos el workflow hay que cambiar el nombre para que no pise al anterior
           path: hangman-api/dist/ # lo que tenemos que subir
@@ -37,4 +37,3 @@ jobs:
         with:
           name: build-code
           path: hangman-api/dist/
-
