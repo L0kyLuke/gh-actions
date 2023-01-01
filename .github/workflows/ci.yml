@@ -25,7 +25,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3 # Usamos las dependencias cacheadas
+      - uses: actions/setup-node@v2 # Usamos las dependencias cacheadas
         with:
           node-version: 16
       - name: test
