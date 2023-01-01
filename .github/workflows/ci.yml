@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3 # Usamos la action para cachear las dependencias
         with:
           node-version: 16
           cache: 'npm'
-          cache-dependency-path: hangman-api/package-lock.json
+          cache-dependency-path: hangman-api/package-lock.json # Hay que poner la ruta relativa. Con esto si cambia algo de la ruta se vuelve a refrescar la caché
       - name: build
         working-directory: ./hangman-api
         run: |
