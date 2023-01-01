@@ -46,5 +46,5 @@ jobs:
         run: # Hacemos el docker build
           echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
           image=$DOCKER_USER/$DOCKER_REPOSITORY:$(date +%s)
-          docker build . -f Dockerfile-workflow --tag $image
+          docker build . --file Dockerfile-workflow --tag $image
           docker push $image
