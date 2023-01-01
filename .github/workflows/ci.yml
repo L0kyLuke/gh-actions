@@ -33,5 +33,4 @@ jobs:
         working-directory: ./hangman-api
         # Aqui eliminamos npm ci ya que no es necesario instalar las depenencias
         run: |
-          npm install -g jest
           npm test  
