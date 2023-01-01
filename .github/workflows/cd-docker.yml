@@ -37,5 +37,4 @@ jobs:
         with:
           name: build-code
           path: hangman-api/dist/
-      - name: Build and Push Docker Image
-        working-directory: ./hangman-api
+
