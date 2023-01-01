@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3 # Usamos la action para cachear las dependencias
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'npm'
-          cache-dependency-path: hangman-api/package-lock.json # Hay que poner la ruta relativa. Con esto si cambia algo de la ruta se vuelve a refrescar la caché
+          cache-dependency-path: hangman-api/package-lock.json
       - name: build
         working-directory: ./hangman-api
         run: |
@@ -25,11 +25,51 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3 # Usamos las dependencias cacheadas
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: test
         working-directory: ./hangman-api
         run: |
           npm ci
-          npm test      
+          npm test
+  # Creamos un nuevo job con test de integración
+  test-integration:
+    runs-on: ubuntu-latest
+    
+    services: # Creamos un servicio de postgres que se estará ejecutando el job en el workflow
+      postgres:
+        image: postgres:14-alpine # Ponemos la versión que queramos
+        env: # variables de entorno
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hangman_db
+        # checkeamos que postgres está ready  
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        # Puertos a usar por postgres
+        ports:
+          - 5432:5432
+
+    steps: #Declaramos los steps de las actions
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Create database relationships
+        working-directory: ./hangman-api
+        env: # Podemos declarar las variables de entorno de postgres
+          DATABASE_PORT: 5432
+          DATABASE_HOST: postgres
+          DATABASE_NAME: hangman_db
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_POOL_MIN: 2
+          DATABASE_POOL_MAX: 10
+        # Comandos de instalación, ejecución de la migración
+        run: |
+          npm ci
+          npx knex migrate:latest --env development  
