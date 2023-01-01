@@ -1,3 +1,4 @@
+# ci3.yml
 name: CI
 on:
   workflow_dispatch:
@@ -32,7 +33,7 @@ jobs:
         working-directory: ./hangman-api
         run: |
           npm test
-  # Creamos un nuevo job con test de integración
+  # Creamos un nuevo job con test de integrac
   test-integration:
     runs-on: ubuntu-latest
     
