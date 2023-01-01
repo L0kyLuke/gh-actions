@@ -37,3 +37,10 @@ jobs:
         with:
           name: build-code
           path: hangman-api/dist/
+      - name: Build and Push Docker Image
+        working-directory: ./hangman-api
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+          DOCKER_USER: "xopiploky"
+          DOCKER_REPOSITORY: "hangman-api"
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} # Aqui ponemos el secreto que hemos configurado Para acceder a un secreto se usa secrets.<nombre secreto>
+        run: docker build . --file Dockerfile.workflow --tag my-image-name:$(date +%s)
