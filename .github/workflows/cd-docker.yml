@@ -43,8 +43,8 @@ jobs:
           DOCKER_USER: "xopiploky"
           DOCKER_REPOSITORY: "hangman-api"
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} # Aqui ponemos el secreto que hemos configurado Para acceder a un secreto se usa secrets.<nombre secreto>
-        run: # Hacemos el docker build
-          echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin |
-          image=$DOCKER_USER/$DOCKER_REPOSITORY:$(date +%s) |
-          docker build . --file Dockerfile-workflow --tag $image |
+        run: | # Nos logueamos y hacemos el docker build
+          echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin
+          image=$DOCKER_USER/$DOCKER_REPOSITORY:$(date +%s)
+          docker build . --file Dockerfile-workflow --tag $image
           docker push $image
