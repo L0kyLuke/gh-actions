@@ -27,16 +27,20 @@ jobs:
           name: build-code # Usa la API de DockerHub. Si reutilizamos el workflow hay que cambiar el nombre para que no pise al anterior
           path: hangman-api/dist/ # lo que tenemos que subir
 
-delivery: # Otro job
-  runs-on: ubuntu-latest
-  needs: build
+  delivery: # Otro job
+    runs-on: ubuntu-latest
+    needs: build
 
-  steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-code
-        path: hangman-api/dist/
-    - name: Build Docker Image
-      working-directory: ./hangman-api
-      run: docker build . --file Dockerfile.workflow --tag my-image-name:$(date +%s)
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-code
+          path: hangman-api/dist/
+      - name: Build and Push Docker Image
+        working-directory: ./hangman-api
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+          DOCKER_USER: "xopiploky"
+          DOCKER_REPOSITORY: "hangman-api"
+          DOCKER_PASSWORD: ${{  }}
+        run: docker build . --file Dockerfile.workflow --tag my-image-name:$(date +%s)
