@@ -31,4 +31,5 @@ jobs:
         working-directory: ./hangman-front
         run: |
           npm ci
+          npm audit fix
           npm test
