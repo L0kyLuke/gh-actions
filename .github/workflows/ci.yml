@@ -37,9 +37,15 @@ jobs:
         with:
           name: build-code
           path: hangman-front/dist/
-      - name: Build and Push Docker Image
-        working-directory: ./hangman-front
-        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí.
-          USER: "L0kyLuke"
-          REPOSITORY: "hangman-front"
-run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u L0kyLuke --password-stdin
+
+    - name: Login to GitHub Container registry
+      uses: docker/login-action@v1
+      env:
+        GITHUB_USER: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+        REPOSITORY: "hangman-front"
+      with:
+        registry: ghcr.io
+        username: $GITHUB_USER
+        password: ${{ secrets.PAT }}
+
