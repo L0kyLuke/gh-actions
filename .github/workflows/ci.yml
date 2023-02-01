@@ -39,7 +39,7 @@ jobs:
           path: hangman-front/dist/
       - name: Build and Push Docker Image
         working-directory: ./hangman-front
-        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí.
           USER: "L0kyLuke"
           REPOSITORY: "hangman-front"
           PAT: ${{ secrets.DOCKER_PASSWORD }}
