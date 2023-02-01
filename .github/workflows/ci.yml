@@ -40,6 +40,14 @@ jobs:
       - name: Build and Push Docker Image
         working-directory: ./hangman-front
         env:
-          USER: "L0kyLuke"
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        with:
+          registry: ghcr.io
+          username: $GITHUB_USER
+          password: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: "hangman-front"
-        run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u L0kyLuke --password-stdin
+        run: | 
+          image=$username/$REPOSITORY:$(date +%s)
+          docker build . --file Dockerfile-workflow --tag $image
+          docker push ghcr.io/$username/$image
