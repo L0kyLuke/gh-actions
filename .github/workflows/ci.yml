@@ -1,10 +1,13 @@
-name: CI-front
+name: Docker Image
+
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main ]
+    branches: [ added-workflow ]
+    paths: ['hangman-front/**']
 
 jobs:
+  # Hacer la build
   build:
     runs-on: ubuntu-latest
     steps:
@@ -16,19 +19,34 @@ jobs:
           cache-dependency-path: hangman-front/package-lock.json
       - name: build
         working-directory: ./hangman-front
+        # Hacemos la build
         run: |
           npm ci
           npm run build --if-present
-  test:
+
+  # Empaquetado de la imagen de Docker
+      - uses: actions/upload-artifact@v3 # Para poder subir los ficheros
+        with:
+          name: build-code # Usa la API de DockerHub. Si reutilizamos el workflow hay que cambiar el nombre para que no pise al anterior
+          path: hangman-front/dist/ # lo que tenemos que subir
+
+  delivery: # Otro job
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/download-artifact@v3
         with:
-          node-version: 16
-      - name: test
+          name: build-code
+          path: hangman-front/dist/
+      - name: Build and Push Docker Image
         working-directory: ./hangman-front
-        run: |
-          npm ci
-          npm test
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+          USER: "L0kyLuke"
+          REPOSITORY: "hangman-front"
+        run: | # Nos logueamos y hacemos el docker build
+          echo $CR_PAT | docker login ghcr.io -u L0kyLuke -p Serruchito2!
+          image=$USER/$REPOSITORY:$(date +%s)
+          docker build . --file Dockerfile-workflow --tag $image
+          docker push ghcr.io/$USER/$image
