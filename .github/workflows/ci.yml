@@ -42,4 +42,4 @@ jobs:
         env:
           USER: "L0kyLuke"
           REPOSITORY: "hangman-front"
-          run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u L0kyLuke --password-stdin
+        run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u L0kyLuke --password-stdin
