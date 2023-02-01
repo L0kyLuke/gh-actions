@@ -1,11 +1,10 @@
-name: CI
+name: Repo GitHub
+
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [ main ]
-    paths: ['hangman-api/**']
 
 jobs:
+  # Hacer la build
   build:
     runs-on: ubuntu-latest
     steps:
@@ -14,63 +13,38 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-          cache-dependency-path: hangman-api/package-lock.json
+          cache-dependency-path: hangman-front/package-lock.json
       - name: build
-        working-directory: ./hangman-api
+        working-directory: ./hangman-front
+        # Hacemos la build
         run: |
           npm ci
           npm run build --if-present
-  test:
+
+  # Empaquetado de la imagen de Docker
+      - uses: actions/upload-artifact@v3 # Para poder subir los ficheros
+        with:
+          name: build-code # Usa la API de DockerHub. Si reutilizamos el workflow hay que cambiar el nombre para que no pise al anterior
+          path: hangman-front/dist/ # lo que tenemos que subir
+
+  delivery: # Otro job
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/download-artifact@v3
         with:
-          node-version: 16
-      - name: test
-        working-directory: ./hangman-api
-        run: |
-          npm ci
-          npm test
-  # Creamos un nuevo job con test de integración
-  test-integration:
-    runs-on: ubuntu-latest
-    
-    services: # Usamos 'service container' de GitHub Creamos un servicio de postgres (dockerizado) que se estará ejecutando el job en el workflow
-      postgres:
-        image: postgres:14-alpine # Ponemos la versión que queramos
-        env: # variables de entorno
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: hangman_db
-        # checkeamos que postgres está ready  
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        # Puertos a usar por postgres
-        ports:
-          - 5432:5432 # Hacemos mapeo de puertos en el localhost
-
-    steps: #Declaramos los steps de las actions
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Create database relationships
-        working-directory: ./hangman-api
-        env: # Podemos declara las variables de entorno de postgres
-          DATABASE_PORT: 5432
-          DATABASE_HOST: localhost # En vez de postgres ya que hemos hecho el mapeo de puertos a localhost
-          DATABASE_NAME: hangman_db
-          DATABASE_USER: postgres
-          DATABASE_PASSWORD: postgres
-          DATABASE_POOL_MIN: 2
-          DATABASE_POOL_MAX: 10
-        # Comandos de instalación de dependencias, ejecución de la migración, y el test de integración
-        run: |
-          npm ci
-          npx knex migrate:latest --env development
-          npm run test:integration
+          name: build-code
+          path: hangman-front/dist/
+      - name: Build and Push Docker Image
+        working-directory: ./hangman-front
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+          USER: "L0kyLuke"
+          REPOSITORY: "hangman-front"
+          PAT: ${{ secrets.DOCKER_PASSWORD }}
+        run: | # Nos logueamos y hacemos el docker build
+          echo $PAT | docker login ghcr.io -u L0kyLuke --password-stdin
+          image=$USER/$REPOSITORY:$(date +%s)
+          docker build . --file Dockerfile-workflow --tag $image
+          docker push ghcr.io/$USER/$image
