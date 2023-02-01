@@ -34,29 +34,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
-      - uses: docker/login-action@v1
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           name: build-code
           path: hangman-front/dist/
-          registry: ghcr.io
-          username: $GITHUB_USER
-          password: ${{ secrets.PAT }}
-
       - name: Build and Push Docker Image
-        env:
-          REGISTRY: ghcr.io
-          IMAGE_NAME: ${{ github.repository }}
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile-workflow
-          target: final
-          push: true
-          tags: |
-            $REGISTRY/$IMAGE_NAME:$(date +%s)
-          build-args: |
-            ENVIRONMENT=production
-
+        working-directory: ./hangman-front
+        env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
+          USER: "L0kyLuke"
+          REPOSITORY: "hangman-front"
+          P4SS: ${{ secrets.PAT }}
+        run: | # Nos logueamos y hacemos el docker build
+          echo $P4SS | docker login ghcr.io -u L0kyLuke --password-stdin
+          image=$USER/$REPOSITORY:$(date +%s)
+          docker build . --file Dockerfile-workflow --tag $image
+          docker push ghcr.io/$USER/$image
