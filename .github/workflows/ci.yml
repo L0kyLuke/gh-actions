@@ -44,7 +44,7 @@ jobs:
           REPOSITORY: "hangman-front"
           PAT: ${{ secrets.DOCKER_PASSWORD }}
         run: | # Nos logueamos y hacemos el docker build
-          echo $PAT | docker login ghcr.io -u L0kyLuke --password-stdin
-          image=$USER/$REPOSITORY:$(date +%s)
+echo $PAT | docker login --username xopiploky --password-stdin
+          image=$DOCKER_USER/$DOCKER_REPOSITORY:$(date +%s)
           docker build . --file Dockerfile-workflow --tag $image
-          docker push ghcr.io/$USER/$image
+          docker push $image
