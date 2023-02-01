@@ -42,9 +42,4 @@ jobs:
         env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí.
           USER: "L0kyLuke"
           REPOSITORY: "hangman-front"
-          PAT: ${{ secrets.PAT }}
-        run: | # Nos logueamos y hacemos el docker build
-          echo $PAT | docker login ghcr.io -u L0kyLuke --password-stdin
-          image=$USER/$REPOSITORY:$(date +%s)
-          docker build . --file Dockerfile-workflow --tag $image
-          docker push ghcr.io/$USER/$image
+run: echo "${{ secrets.PAT }}" | docker login ghcr.io -u L0kyLuke --password-stdin
