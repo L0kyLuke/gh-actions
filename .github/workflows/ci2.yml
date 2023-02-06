@@ -54,4 +54,4 @@
             with:
               context: "{{defaultContext}}:hangman-front"
               push: true
-              tags: ghcr.io/l0kyluke/gh-actions:latest
+              tags: $registry/${{ github.repository_owner }}/$REPOSITORY:latest
