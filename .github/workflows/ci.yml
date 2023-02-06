@@ -41,7 +41,7 @@ jobs:
         working-directory: ./hangman-front
         env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
           USER: "L0kyLuke"
-          REPOSITORY: "hangman-front"
+          REPOSITORY: "gh-actions"
           P4SS: ${{ secrets.PAT }}
         run: | # Nos logueamos y hacemos el docker build
           echo $P4SS | docker login ghcr.io -u L0kyLuke --password-stdin
