@@ -33,6 +33,7 @@
 
       login:
         runs-on: ubuntu-latest
+        needs: test
         steps:
           -
             name: Login to GitHub Container Registry
