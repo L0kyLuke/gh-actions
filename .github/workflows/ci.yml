@@ -47,4 +47,5 @@ jobs:
           echo $P4SS | docker login ghcr.io -u L0kyLuke --password-stdin
           image=$USER/$REPOSITORY:$(date +%s)
           docker build . --file Dockerfile-workflow --tag $image
-          docker push ghcr.io/$USER/$image
+          echo "$image"
+          docker push ghcr.io/$image
