@@ -49,7 +49,9 @@
           -
             name: Build and push
             uses: docker/build-push-action@v4
+            env:
+              REPOSITORY: "hangman-front"
             with:
               context: "{{defaultContext}}:hangman-front"
               push: true
-              tags: user/app:latest
+              tags: $username/$REPOSITORY:$(date +%s)
