@@ -1,6 +1,5 @@
     name: Docker-manual
     on:
-      push:
       workflow_dispatch:
 
     jobs:
