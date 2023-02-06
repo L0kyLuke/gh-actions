@@ -54,4 +54,4 @@
             with:
               context: "{{defaultContext}}:hangman-front"
               push: true
-              tags: l0kyluke/app:latest
+              tags: l0kyluke/hangman-front:latest
