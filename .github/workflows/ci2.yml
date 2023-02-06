@@ -50,10 +50,8 @@
             name: Build and push
             uses: docker/build-push-action@v4
             env:
-              REGISTRY: "ghcr.io"
               REPOSITORY: "gh-actions"
-              USERNAME: l0kyluke
             with:
               context: "{{defaultContext}}:hangman-front"
               push: true
-              tags: $REGISTRY/$USERNAME/$REPOSITORY:latest
+              tags: ghcr.io/l0kyluke/gh-actions:$(date +%s)
