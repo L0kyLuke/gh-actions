@@ -41,10 +41,11 @@ jobs:
         working-directory: ./hangman-front
         env: # Datos para loguearnos en DockerHub ya que nuestras imágenes se alojan allí
           USER: "l0kyluke"
+          USERNAME: ${{ github.repository_owner }}
           REPOSITORY: "gh-actions"
           P4SS: ${{ secrets.GITHUB_TOKEN }}
         run: | # Nos logueamos y hacemos el docker build
-          echo "$P4SS | docker login ghcr.io -u L0kyLuke --password-stdin"
+          echo "$P4SS | docker login ghcr.io -u $USERNAME --password-stdin"
           image=$USER/$REPOSITORY:$(date +%s)
           docker build . --file Dockerfile-workflow --tag ghcr.io/$image
           echo "$image"
