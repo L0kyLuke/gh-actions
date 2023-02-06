@@ -44,7 +44,7 @@ jobs:
           REPOSITORY: "gh-actions"
           P4SS: ${{ secrets.GITHUB_TOKEN }}
         run: | # Nos logueamos y hacemos el docker build
-          echo "$P4SS | docker login ghcr.io -u $USER --password-stdin"
+          echo "$P4SS | docker login ghcr.io -u L0kyLuke --password-stdin"
           image=$USER/$REPOSITORY:$(date +%s)
           docker build . --file Dockerfile-workflow --tag ghcr.io/$image
           echo "$image"
