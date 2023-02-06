@@ -52,8 +52,8 @@
             env:
               REGISTRY: "ghcr.io"
               REPOSITORY: "gh-actions"
-
+              USERNAME: l0kyluke
             with:
               context: "{{defaultContext}}:hangman-front"
               push: true
-              tags: "$REGISTRY/${{ github.repository_owner }}/$REPOSITORY:$(date +%s)"
+              tags: "$REGISTRY/$USERNAME/$REPOSITORY:$(date +%s)"
