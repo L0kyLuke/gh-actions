@@ -46,6 +46,6 @@ jobs:
         run: | # Nos logueamos y hacemos el docker build
           echo "$P4SS | docker login ghcr.io -u $USER --password-stdin"
           image=$USER/$REPOSITORY:$(date +%s)
-          docker build . --file Dockerfile-workflow --tag $image
+          docker build . --file Dockerfile-workflow --tag ghcr.io/$image
           echo "$image"
           docker push ghcr.io/$image
